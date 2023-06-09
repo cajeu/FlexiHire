@@ -43,20 +43,32 @@
         if(isset($_POST['logar'])){
             $user=$_POST['email'];
             $senha=$_POST['senha'];
-            $login=$conn->prepare('SELECT * FROM 
+            $loginF=$conn->prepare('SELECT * FROM 
             `funcionario` WHERE `nm_email`= :pemail
             AND `nr_senha`=:psenha;');
-            $login->bindValue(':pemail',$user);
-            $login->bindValue(':psenha',$senha);
-            $login->execute();
-            $funcionario = 1;
-            if($login->rowCount()==0){
+            $loginF->bindValue(':pemail',$user);
+            $loginF->bindValue(':psenha',$senha);
+            $loginF->execute();
+            $loginE=$conn->prepare('SELECT * FROM 
+            `estabelecimento` WHERE `nm_email`= :pemail
+            AND `nr_senha`=:psenha;');
+            $loginE->bindValue(':pemail',$user);
+            $loginE->bindValue(':psenha',$senha);
+            $loginE->execute();
+            if($loginF->rowCount()==0 and $loginE->rowCount()==0){
                 ?> <h4 class="text-center"> Login ou senha invalida! </h4><?php
             }else{
-                session_start();
-                $row=$login->fetch();
-                $_SESSION['login']=$row['id_funcionario'];
-                header('location:home.php');             
+                if($loginF->rowCount()==1 ){
+                    session_start();
+                    $row=$loginF->fetch();
+                    $_SESSION['login']=$row['id_funcionario'];
+                    header('location:home.php'); 
+                } else if($loginE->rowCount()==1 ){
+                    session_start();
+                    $row=$loginE->fetch();
+                    $_SESSION['login']=$row['id_estabelecimento'];
+                    header('location:homeEstab.php'); 
+                }                            
             }
         }
     ?>

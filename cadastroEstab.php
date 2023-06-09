@@ -21,46 +21,87 @@
             </div>
         </div>
     </div>
-    <div class="container-fluid ">
-        <div class="row py-4">
-            <div class="col-md-2">
-            </div>
-            <div class="col-md-8 col-sm-12 text-sm-start px-4 py-3 degrade branco rounded-3">
-            <div class="mb-3">
-                    <label for="InputEmail" class="form-label">Email:</label>
-                    <input type="email" class="form-control" id="InputEmail" aria-describedby="emailHelp">
-                  </div>
-                  <div class="mb-3">
-                    <label for="InputNome" class="form-label">Nome:</label>
-                    <input type="text" class="form-control" id="InputNome">
-                  </div>
-                  <div class="mb-3">
-                    <label for="InputCNPJ" class="form-label">CNPJ:</label>
-                    <input type="text" class="form-control" id="InputCNPJ">
-                  </div>
-                  <div class="mb-3">
-                    <label for="InputRamo" class="form-label">Ramo:</label>
-                    <input type="text" class="form-control" id="InputRamo">
-                  </div>
-                  <div class="mb-3">
-                    <label for="InputResp" class="form-label">Nome do Responsável:</label>
-                    <input type="text" class="form-control" id="InputResp">
-                  </div>
-                  <div class="mb-3">
-                    <label for="InputCPF" class="form-label">CPF do Responsável:</label>
-                    <input type="text" class="form-control" id="InputCPF" \ pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" \> 
-                  </div>
-                  <div class="mb-3">
-                    <label for="InputSenha" class="form-label">Senha:</label>
-                    <input type="password" class="form-control" id="InputSenha">
-                    <a href="login.php" class="pedirsenha py-3"><small>Já tem cadastro? faça seu login</small></a>
-                  </div>
-                  <button type="submit" class="btn btn-light border-0">Cadastrar</button>
-            </div>
-            <div class="col-md-2">
-            </div>
-        </div>
-    </div>
+    <form action="cadastroEstab.php" method="post">
+      <div class="container-fluid ">
+          <div class="row py-4">
+              <div class="col-md-2">
+              </div>
+              <div class="col-md-8 col-sm-12 text-sm-start px-4 py-3 degrade branco rounded-3">
+                <div class="mb-3">
+                  <label for="InputNome" class="form-label">Nome:</label>
+                  <input type="text" class="form-control" id="InputNome" name="nome">
+                </div>
+                <div class="mb-3">
+                  <label for="InputCNPJ" class="form-label">CNPJ:</label>
+                  <input type="text" class="form-control" id="InputCNPJ" name="cnpj">
+                </div>
+                <div class="mb-3">
+                  <label for="InputRamo" class="form-label">Ramo:</label>
+                  <input type="text" class="form-control" id="InputRamo" name="ramo">
+                </div>
+                <div class="mb-3">
+                  <label for="InputResp" class="form-label">Nome do Responsável:</label>
+                  <input type="text" class="form-control" id="InputResp" name="resp">
+                </div>
+                <div class="mb-3">
+                  <label for="InputCPF" class="form-label">CPF do Responsável:</label>
+                  <input type="text" class="form-control" id="InputCPF" name="cpf"> 
+                </div>
+                <div class="mb-3">
+                  <label for="InputEmail" class="form-label">Email:</label>
+                  <input type="email" class="form-control" id="InputEmail" aria-describedby="emailHelp" name="email">
+                </div>
+                <div class="mb-3">
+                  <label for="InputSenha" class="form-label">Senha:</label>
+                  <input type="password" class="form-control" id="InputSenha" name="senha">
+                  <p class="pedirsenha py-3"><small>Já tem cadastro? faça seu <a href="login.php" class="pedirsenha">login</small></a></p>
+                </div>
+                <input type="submit" class="btn btn-light border-0" value="Cadastrar" name="cadastrarE" />
+              </div>
+              <div class="col-md-2">
+              </div>
+          </div>
+      </div>
+  </form>
+  <?php
+        if(isset($_POST['cadastrarE'])){
+            $nome=$_POST['nome'];
+            $cnpj=$_POST['cnpj'];
+            $ramo=$_POST['ramo'];
+            $resp=$_POST['resp'];
+            $cpf=$_POST['cpf'];
+            $user=$_POST['email'];
+            $senha=$_POST['senha'];
+            $validarE=$conn->prepare('SELECT * FROM `estabelecimento` WHERE `nm_email` LIKE :pemail');
+            $validarE->bindValue(':pemail', $user);
+            $validarE->execute();
+            $validarC=$conn->prepare('SELECT * FROM `estabelecimento` WHERE `nr_cnpj` LIKE :pcnpj');
+            $validarC->bindValue(':pcnpj', $cnpj);
+            $validarC->execute();
+            if($validarE->rowCount()==0){
+                if($validarC->rowCount()==0){
+                    $cadastro=$conn->prepare('INSERT INTO `estabelecimento` (`id_estabelecimento`, `nm_estabelecimento`,`tipo_estabelecimento`, `nr_cnpj`, `nm_responsavel`, `nr_cpf`, `nm_email`, `nr_senha`, `eh_funcionario`)
+                    VALUES (NULL, :pnome, :pramo, :pcnpj, :presp, :pcpf, :pemail, :psenha, 0);');
+                    $cadastro->bindValue(':pnome', $nome);
+                    $cadastro->bindValue(':pramo', $ramo);
+                    $cadastro->bindValue(':pcnpj', $cnpj);
+                    $cadastro->bindValue(':presp', $resp);
+                    $cadastro->bindValue(':pcpf', $cpf);
+                    $cadastro->bindValue(':pemail', $user);
+                    $cadastro->bindValue(':psenha', $senha);            
+                    $cadastro->execute();
+                    ?><h4 class="text-center"> Usuário Cadastrado </h4>
+                    <br><?php
+                } else {
+                    ?><h4 class="text-center"> Esse CNPJ já está sendo usado. </h4>
+                    <br><?php
+                } 
+                } else {
+                    ?><h4 class="text-center"> Esse Email já está sendo usado. </h4>
+                    <br><?php
+                }
+        }
+        ?>
     <footer class="container-fluid footer">
         <div class="row">
             <div class="col-sm-11 text-sm-end text-center">
