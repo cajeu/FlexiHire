@@ -7,6 +7,15 @@ a.nav-link:hover {
     color:#1adbe8;
 }
 
+a.log-link{
+    color: white;
+    text-decoration: none;
+}
+a.log-link:hover{
+    color:#1adbe8;
+    text-decoration: none;
+}
+
 .conteudo{
     width: 100%;
     height: 470px;
@@ -133,10 +142,6 @@ a.pedirsenha:hover{
 
 /* Cadastro - Escolher */
 
-.link1{
-    background-color: pink;
-}
-
 .escolher{
     height: 505px;
     width: 100%;
@@ -171,4 +176,9 @@ a.pedirsenha:hover{
 .btn-light:hover{
     background-color: #03121D !important;
     color: #DFEEEE !important;
+}
+
+/* Home */ 
+.topo{
+    color: white;
 }

@@ -1,5 +1,5 @@
 <?php include "conn.php"; ?>
-<html lang="pt-br">
+<html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=chrome">
@@ -41,12 +41,12 @@
     </form>
     <?php
         if(isset($_POST['logar'])){
-            $email=$_POST['email'];
+            $user=$_POST['email'];
             $senha=$_POST['senha'];
             $login=$conn->prepare('SELECT * FROM 
-            `login` WHERE `email`= :pemail
-            AND `senha`=:psenha;');
-            $login->bindValue(':pemail',$email);
+            `funcionario` WHERE `nm_email`= :pemail
+            AND `nr_senha`=:psenha;');
+            $login->bindValue(':pemail',$user);
             $login->bindValue(':psenha',$senha);
             $login->execute();
             $funcionario = 1;
@@ -55,7 +55,7 @@
             }else{
                 session_start();
                 $row=$login->fetch();
-                $_SESSION['login']=$row['id_login'];
+                $_SESSION['login']=$row['id_funcionario'];
                 header('location:home.php');             
             }
         }
