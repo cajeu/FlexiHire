@@ -9,6 +9,11 @@
     $nome->bindValue(':pid',$id);
     $nome->execute();
     $rownome=$nome->fetch();
+    if($rownome['eh_funcionario']>0){
+        header('location:home.php');
+    }else{
+        header('location:homeEstab.php');
+    }
 
 ?>
 <html lang="pt">
