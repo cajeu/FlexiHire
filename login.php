@@ -1,5 +1,5 @@
 <?php include "conn.php"; ?>
-<html lang="pt">
+<html lang="pt"> 
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=chrome">
@@ -61,12 +61,12 @@
                 if($loginF->rowCount()==1 ){
                     session_start();
                     $row=$loginF->fetch();
-                    $_SESSION['login']=$row['id_funcionario'];
+                    $_SESSION['loginF']=$row['id_funcionario'];
                     header('location:home.php'); 
                 } else if($loginE->rowCount()==1 ){
                     session_start();
                     $row=$loginE->fetch();
-                    $_SESSION['login']=$row['id_estabelecimento'];
+                    $_SESSION['loginE']=$row['id_estabelecimento'];
                     header('location:homeEstab.php'); 
                 }                            
             }

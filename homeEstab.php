@@ -1,20 +1,18 @@
 <?php include "conn.php"; 
     session_start();
-    if(!isset($_SESSION['login'])){
+    if(!isset($_SESSION['loginE'])){
         header('location:login.php');
     }
-    $id=$_SESSION['login'];
+    $id=$_SESSION['loginE'];
     $nome=$conn->prepare('SELECT * FROM
     `estabelecimento` WHERE id_estabelecimento=:pid');
     $nome->bindValue(':pid',$id);
     $nome->execute();
     $rownome=$nome->fetch();
-    if($rownome['eh_funcionario']>0){
-        header('location:home.php');
-    }else{
-        header('location:homeEstab.php');
+    if($rownome['eh_funcionario']==1){
+        session_destroy();
+        header('location:login.php');
     }
-
 ?>
 <html lang="pt">
 <head>
