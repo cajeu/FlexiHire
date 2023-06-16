@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 26-Maio-2023 às 01:26
+-- Tempo de geração: 15-Jun-2023 às 02:54
 -- Versão do servidor: 10.4.24-MariaDB
 -- versão do PHP: 8.1.6
 
@@ -85,12 +85,21 @@ CREATE TABLE `estabelecimento` (
   `id_estabelecimento` int(11) NOT NULL,
   `nm_estabelecimento` varchar(100) NOT NULL,
   `tipo_estabelecimento` varchar(50) NOT NULL,
-  `nr_cnpj` int(14) NOT NULL,
+  `nr_cnpj` varchar(14) NOT NULL,
   `nm_responsavel` varchar(100) NOT NULL,
+  `nr_cpf` varchar(11) NOT NULL,
   `nm_email` varchar(100) NOT NULL,
   `nr_senha` varchar(8) NOT NULL,
-  `id_endereco` int(11) NOT NULL
+  `eh_funcionario` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Extraindo dados da tabela `estabelecimento`
+--
+
+INSERT INTO `estabelecimento` (`id_estabelecimento`, `nm_estabelecimento`, `tipo_estabelecimento`, `nr_cnpj`, `nm_responsavel`, `nr_cpf`, `nm_email`, `nr_senha`, `eh_funcionario`) VALUES
+(5, 'teste', 'teste', 'teste', 'teste', 'teste', 'teste@bar.com', 'teste', 0),
+(6, 'marcelo fiorin', 'namo da juh', '11146998900156', 'marcelo fiorin', '6961241322', 'namodajuh@namorado.amo.muito.com', 'senha', 0);
 
 -- --------------------------------------------------------
 
@@ -101,13 +110,21 @@ CREATE TABLE `estabelecimento` (
 CREATE TABLE `funcionario` (
   `id_funcionario` int(11) NOT NULL,
   `nm_funcionario` varchar(100) NOT NULL,
-  `nr_cpf` int(11) NOT NULL,
+  `nr_cpf` varchar(11) NOT NULL,
   `dt_nasc` date NOT NULL,
   `ds_experiencia` varchar(200) NOT NULL,
   `nm_email` varchar(100) NOT NULL,
   `nr_senha` varchar(8) NOT NULL,
-  `id_endereco` int(11) NOT NULL
+  `eh_funcionario` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Extraindo dados da tabela `funcionario`
+--
+
+INSERT INTO `funcionario` (`id_funcionario`, `nm_funcionario`, `nr_cpf`, `dt_nasc`, `ds_experiencia`, `nm_email`, `nr_senha`, `eh_funcionario`) VALUES
+(8, 'Julia 3', '12345678900', '1997-02-23', 'teste 3', 'j@gmail.com', '12345678', 1),
+(9, 'Julia', '12312312312', '1997-02-23', 'teste', 'j.cajeu@gmail.com', '12345678', 1);
 
 -- --------------------------------------------------------
 
@@ -165,15 +182,13 @@ ALTER TABLE `endereco`
 -- Índices para tabela `estabelecimento`
 --
 ALTER TABLE `estabelecimento`
-  ADD PRIMARY KEY (`id_estabelecimento`),
-  ADD KEY `fk_endereco` (`id_endereco`);
+  ADD PRIMARY KEY (`id_estabelecimento`);
 
 --
 -- Índices para tabela `funcionario`
 --
 ALTER TABLE `funcionario`
-  ADD PRIMARY KEY (`id_funcionario`),
-  ADD KEY `fk_enderecoFunc` (`id_endereco`);
+  ADD PRIMARY KEY (`id_funcionario`);
 
 --
 -- Índices para tabela `vaga`
@@ -215,13 +230,13 @@ ALTER TABLE `endereco`
 -- AUTO_INCREMENT de tabela `estabelecimento`
 --
 ALTER TABLE `estabelecimento`
-  MODIFY `id_estabelecimento` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_estabelecimento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de tabela `funcionario`
 --
 ALTER TABLE `funcionario`
-  MODIFY `id_funcionario` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_funcionario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de tabela `vaga`
@@ -251,12 +266,6 @@ ALTER TABLE `avaliacao_estab`
 --
 ALTER TABLE `avaliacao_func`
   ADD CONSTRAINT `fk_funcionarioAv` FOREIGN KEY (`id_funcionario`) REFERENCES `funcionario` (`id_funcionario`);
-
---
--- Limitadores para a tabela `estabelecimento`
---
-ALTER TABLE `estabelecimento`
-  ADD CONSTRAINT `fk_endereco` FOREIGN KEY (`id_endereco`) REFERENCES `endereco` (`id_endereco`);
 
 --
 -- Limitadores para a tabela `vaga`
